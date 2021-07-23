@@ -1,0 +1,170 @@
+:root{
+    --darkGreen: rgb(51, 228, 35);
+    --darkerGreen: #18890F;
+}
+.mainheader {
+    padding-top:1rem;
+    justify-content: center;
+    text-align: center;
+}
+
+
+.bodyContent{
+    text-align: left;
+    background-color: linear-gradient( rgb(35, 228, 109), rgb(35, 228, 109));
+    min-height: 700px;
+
+}
+
+.bodyContent1{
+    text-align: left;
+    padding: 1rem 1rem;
+    background-color: var(--darkGreen) ;
+
+}
+
+
+.blurBackground{
+    background-color: rgba(0,0,0, 0.4); /* Black w/opacity/see-through */
+    font-weight: bold;
+    border: 3px solid #f1f1f1;    
+    z-index: 2;  
+    margin-top: 2rem;  
+    padding-bottom: 2rem;
+  
+}
+
+.updatePage{
+    color: white;
+}
+
+/* Accounts styling */
+.baseAccount {
+    background-color: rgb(14, 243, 90);
+    text-align: center;   
+}
+
+.card{
+    width: 18rem;
+    margin:auto;
+    margin-bottom: 2rem;
+    background-color: rgba(0, 255, 85, 0.719);
+   
+}
+
+.accountMenu{
+    margin-bottom: 2rem;
+}
+
+.logoutBtn{
+    position: absolute;
+    right: 1rem;
+}
+
+.header {
+    padding-top:2rem;
+    background-color: red;
+}
+
+.mainNavbar {
+    background-color: var(--darkerGreen);
+}
+
+.aboutCard {
+    width: 75%; 
+    border: 5px solid #EEE500; 
+    padding: 40px; 
+    margin: auto; 
+    text-align:center
+}
+
+.cardImg{
+    height: 100px;
+    width: 200px;
+    margin: auto; 
+    margin-bottom: 1%;
+}
+
+.createJobContainer{
+  background-color: rgb(156, 223, 228);
+  padding: 1rem 1rem;
+}
+
+#badge{
+    margin:auto;
+}
+
+#updateJobContainer{
+    padding: 20% 0;
+}
+
+.bg-info{
+    padding: 2rem;
+}
+
+.input_form{
+    margin:0;
+}
+
+#chartContainer{
+    background-color: rgb(252, 245, 245);
+    padding:1rem;
+    margin-top:2rem;
+    min-height: 30rem;   
+
+}
+
+@media(min-width:850px)
+{    
+    .aboutCard {
+        width: 48rem; 
+        border: 5px solid #EEE500; 
+        padding: 40px; 
+        margin: auto; 
+        text-align:center
+    }
+}
+
+.successContainer, .cancelledContainer{
+    margin: auto;
+    margin-top: 3rem;
+}
+
+#baseFooter{
+    position:fixed;
+    width: 100%;
+    height: 2rem;
+    bottom:0;
+}
+
+.sticky{
+    position:fixed;
+    top:0;
+    z-index: 1000;
+    width: 92%;
+    margin-right: 2rem;
+}
+
+@media(min-width:425px){
+    .sticky{
+        width:94%;
+    }
+}
+
+@media(min-width:768px){
+    .sticky{
+        width:96%;
+    }
+}
+
+@media(min-width:1024px){
+    .sticky{
+        width:97%;
+    }
+}
+
+@media(min-width:1440px){
+    .sticky{
+        width:98%;
+    }
+}

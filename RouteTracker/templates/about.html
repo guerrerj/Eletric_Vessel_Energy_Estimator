@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load static %}
+{% block pageInput %}
+   
+    <div class="card text-white bg-info mb-3 mt-3 aboutCard">
+        {% comment %} <img class="card-img-top cardImg" src="" alt="Card image cap"> {% endcomment %}
+        <h3 class="card-title"> 
+           <strong> About</strong>
+        </h3>
+        <div class="card-body">
+            <h6 style="color: white; font-size: 2rem"><!--class="card-subtitle mb-2 text-muted"-->
+                The Electric Vessel Energy Estimation System
+            </h6>
+            <p style="color: white; padding: 20px; font-size: 1rem" class="card-text"> <!---->
+                This project's goal is to determine the electric energy required to run different vessels 
+                accross different routes for different loads and types of vessels.<br><br>
+                <span style="font-weight:bold; font-size: 1.15rem">Instructions</span><br>
+                In the navigation bar at the top of this webpage, click 'Add Route' 
+                to submit a route or click 'View Routes' to view the energy analysis for a given route.
+            </p> 
+            <footer style="color: white;" class="blockquote-footer">
+                <small style="color: white; font-size: 0.85rem">
+                   Collaborators: <cite title="Source Title">Obaid, Jose, Emmanuel, Wenli</cite>
+                </small>
+            </footer>
+        </div>
+    </div>
+{% endblock %}
