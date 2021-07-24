@@ -12,6 +12,22 @@
          <div class="bg-info ">
              <form action="{% url 'view' %}" method="post">
                {% csrf_token %} 
+               <div class="row mb-3 justify-content-center">
+                  <a tabindex="0" class="btn btn-md btn-danger popover-dismiss" role="button"
+                                 data-toggle="popover"
+                                 data-trigger="focus"
+                                 data-html='true'
+                                 title="Electric Vessel Energy Estimation Inputs"
+                                 data-content="<b>Route Title</b>: The name given to refer to the route. <br/>
+                                              <b>Initial SOC</b>: Is the starting State of Charge of the vessel in percent. <br/>
+                                              <b>Battery Capacity</b>: Is the amount of storage the battery can hold in Kilowatt hours. <br/>
+                                              <b>Battery Rating</b>: Is the voltage the battery requires to charge in DC voltage. <br/>
+                                              <b>Propulsion Method</b>: Is a toggle to specify whether the analysis is full electric or hybrid electric. <br/>
+                                              <b>Power Requirements</b>: Is the minimum and maximum power expected throughout the different sections of a trip, namely, 
+                                               departure, transit, arrival and stay. These expected values are in kilowatts. <br/>
+                                              <b>Times</b>: Is the time schedule for the route which includes all trips for the day and corresponding trip sections">
+                                 Click for Input Description</a>
+               </div>
                {% bootstrap_field form.routeTitle layout='horizontal' %}
                {% bootstrap_field form.initialSOC layout='horizontal' %}
                {% bootstrap_field form.batteryCapacity layout='horizontal' %}
@@ -29,7 +45,7 @@
                     {% endfor %}
                </div>
                <div class="row d-none docked-charging-method">
-                    <div class="col-sm-4">{{ form.dockedChargingMethod.label }}</div>
+                    <div class="col-sm-4">{{ form.dockedChargingMethod.label }} </div>
                     {% for radio in form.dockedChargingMethod %}
                     <div class="col-sm-4 text-center">{{radio.choice_label}}</div>
                     {% endfor %}
@@ -41,7 +57,7 @@
                     {% endfor %}
                </div>
                {% bootstrap_field form.thresholdPower layout='horizontal' form_group_class='d-none threshold-power' %}
-               <p class="text-center">Power Requirements (kw)</p>
+               <p class="text-center"> Power Requirements (kw)</p> 
                <div class="row mb-1">
                 <div class="col-sm-4"></div>
                 <div class="col-sm-4 text-center">Min</div>
@@ -67,7 +83,7 @@
                     <div class="col-sm-4">{% bootstrap_field form.minStayPow show_label=False %}</div>
                     <div class="col-sm-4">{% bootstrap_field form.maxStayPow show_label=False %}</div>
                 </div>
-               <p>Times</p>
+               <p> Times</p> 
                <div class="row">
                    <div class="col-sm-3">Departure Time</div>
                    <div class="col-sm-3">Transit Time</div>
@@ -96,9 +112,11 @@
                        </div>
                    </div>
                </div>
-               <div class="d-flex justify-content-end" id="add-button-block">
-                   <div><button type="button" class="btn btn-dark" id="add-trip-timings"><i class="fas fa-plus-circle fa-2x"></i></button></div>
-               </div>
+               <div class="d-flex justify-content-end "  id="add-button-block">
+                   <div><button type="button" class="btn btn-dark" id="add-trip-timings"><i class="fas fa-plus-circle fa"></i></button></div>
+                   <div><button type="button" class="btn btn-dark" id="minus-trip-timings"><i class="fas fa-minus-circle fa"></i></button></div>
+               </div>               
+             
                {% buttons submit='SUBMIT' %}{% endbuttons %}
             </form>   
            
@@ -155,6 +173,10 @@
     <script> 
         var routeChart = undefined;
         $(document).ready(function () {
+            $('.popover-dismiss').popover({
+                   trigger: 'focus'
+            });
+
             // catch the form's submit event
             $('.js-submit').on('click', function (e) {
                 e.preventDefault();
@@ -197,8 +219,10 @@
                     type: 'POST',
                     // on success
                     success: function (response) {
-                        console.log("response", response)
+                        console.log("response", response);
                         if (response.data === undefined){
+                            alert("Error: " + response.err_msg);
+                            $("#rname").val("");
                             return; // return 
                         }
 
@@ -314,24 +338,31 @@
              });
             let add_trip_timings_button = $('#add-trip-timings');
             let add_button_block = $('#add-button-block');
-            let departure_ind, transit_ind, arrival_ind, stay_ind;
-            departure_ind = transit_ind = arrival_ind = stay_ind = 1;
+            let row_ind = 1;           
             add_trip_timings_button.click((e) => {
                 // console.log("invoked");
-                let new_timing_row = $(`<div class="row">
-                        <div class="col-sm-3"><div class="form-group"><input type="datetime-local" name="departure_${departure_ind}" class="form-control" title="" required="" id="id_departure_${departure_ind}"></div></div>
-                        <div class="col-sm-3"><div class="form-group"><input type="datetime-local" name="transit_${transit_ind}" class="form-control" title="" required="" id="id_transit_${transit_ind}"></div></div>
-                        <div class="col-sm-3"><div class="form-group"><input type="datetime-local" name="arrival_${arrival_ind}" class="form-control" title="" required="" id="id_arrival_${arrival_ind}"></div></div>
-                        <div class="col-sm-3"><div class="form-group"><input type="datetime-local" name="stay_${stay_ind}" class="form-control" title="" required="" id="id_stay_${stay_ind}"></div></div>
+                let new_timing_row = $(`<div class="row row-ind">
+                        <div class="col-sm-3"><div class="form-group"><input type="datetime-local" name="departure_${row_ind}" class="form-control" title="" required="" id="id_departure_${row_ind}"></div></div>
+                        <div class="col-sm-3"><div class="form-group"><input type="datetime-local" name="transit_${row_ind}" class="form-control" title="" required="" id="id_transit_${row_ind}"></div></div>
+                        <div class="col-sm-3"><div class="form-group"><input type="datetime-local" name="arrival_${row_ind}" class="form-control" title="" required="" id="id_arrival_${row_ind}"></div></div>
+                        <div class="col-sm-3"><div class="form-group"><input type="datetime-local" name="stay_${row_ind}" class="form-control" title="" required="" id="id_stay_${row_ind}"></div></div>
                     </div>
                     `);
-                departure_ind += 1;
-                transit_ind += 1;
-                arrival_ind += 1;
-                stay_ind += 1;
+                row_ind += 1;
+            
                 // console.log('new timing row created');
                 // console.log(new_timing_row);
                 new_timing_row.insertBefore(add_button_block);
+            });
+            $('#minus-trip-timings').on('click', function(e){
+                console.log("Rowind", row_ind);
+                if (row_ind === 1){
+                    return; 
+                }
+                console.log( $(add_button_block).closest('.row-ind'));
+                $(add_button_block).prev().remove(); // Remove rows of dates 
+                row_ind -= 1;
+            
             });
 
             // show hide docked charging method

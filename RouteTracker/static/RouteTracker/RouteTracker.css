@@ -1,5 +1,5 @@
 :root{
-    --darkGreen: rgb(51, 228, 35);
+    --darkGreen: rgb(46, 207, 31);
     --darkerGreen: #18890F;
 }
 .mainheader {
@@ -67,7 +67,7 @@
 }
 
 .mainNavbar {
-    background-color: var(--darkerGreen);
+    background-color: var(--darkGreen);
 }
 
 .aboutCard {

@@ -110,15 +110,15 @@ DATABASES = {
 
         'ENGINE': 'django.db.backends.postgresql',
 
-        'NAME': os.getenv('DBNAME'),
+        'NAME': 'postgres',
 
-        'USER': os.getenv('DBUSER'),
+        'USER':'postgres',
 
-        'PASSWORD': os.getenv('DBPASS'),
+        'PASSWORD': 'admin',
 
-        'HOST': os.getenv('DBHOST'),
+        'HOST': 'localhost',
 
-        'PORT': os.getenv('DBPORT'),
+        'PORT': '5432',
 
     }
 }
@@ -188,8 +188,8 @@ DISABLE_COLLECTSTATIC=1
 
 #  Create default admin super user 
 
-import dj_database_url 
-prod_db  =  dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(prod_db)
+# import dj_database_url 
+# prod_db  =  dj_database_url.config(conn_max_age=500)
+# DATABASES['default'].update(prod_db)
 
 # Reset local postgres db: >python manage.py reset_db

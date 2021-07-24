@@ -102,7 +102,7 @@ def getOutputData(request):
             routeInfo = Route.objects.get(routeTitle=routeName)
         except Exception as ex:
             print("Route not found with err", ex)
-            return JsonResponse({})
+            return JsonResponse({"err_msg": "No matching routes have been found!"})
 
         # change kw to w
         routeInfo.minDeparturePow  = [x*1000 for x in routeInfo.minDeparturePow]

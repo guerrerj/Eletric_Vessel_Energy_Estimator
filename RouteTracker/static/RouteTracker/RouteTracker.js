@@ -26,3 +26,9 @@ $(function () {
   );
   headerObserver.observe(header); 
 
+
+  $(function(){
+    $('.popover-dismiss').popover({
+      trigger: 'focus'
+    });
+  });
