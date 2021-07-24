@@ -87,7 +87,7 @@ def calculate_SOC(SOC_previous, min_power, max_power, voltage, last_date_time, c
     average_power=(max_power+min_power)/2
     load_current=average_power/voltage
     second_diff=(current_date_time-last_date_time).total_seconds()
-    result=SOC_previous+load_current*second_diff/Qn
+    result=SOC_previous+(load_current*second_diff)/Qn
     return result
 
 def getOutputData(request):
@@ -99,22 +99,34 @@ def getOutputData(request):
         routeName = request.POST.get('routeName', None) 
         routeInfo = None
         try:
-            routeInfo = Route.objects.get(routeTitle=routeName)           
+            routeInfo = Route.objects.get(routeTitle=routeName)
         except Exception as ex:
             print("Route not found with err", ex)
             return JsonResponse({})
+
+        # change kw to w
+        routeInfo.minDeparturePow  = [x*1000 for x in routeInfo.minDeparturePow]
+        routeInfo.maxDeparturePow  = [x*1000 for x in routeInfo.maxDeparturePow]
+        routeInfo.minTransitPow    = [x*1000 for x in routeInfo.minTransitPow]
+        routeInfo.maxTransitPow    = [x*1000 for x in routeInfo.maxTransitPow]
+        routeInfo.minArrivalPow    = [x*1000 for x in routeInfo.minArrivalPow]
+        routeInfo.maxArrivalPow    = [x*1000 for x in routeInfo.maxArrivalPow]
+        routeInfo.minStayPow       = [x*1000 for x in routeInfo.minStayPow]
+        routeInfo.maxStayPow       = [x*1000 for x in routeInfo.maxStayPow]
+        routeInfo.thresholdPower *= 1000
+
         SOC_previous=routeInfo.initialSOC
         last_min_power=0
         last_max_power=0
         last_voltage=routeInfo.batteryRating
-        last_Qn=routeInfo.batteryCapacity
+        last_Qn= (routeInfo.batteryCapacity * 1000 * 3600 ) / last_voltage
         last_date_time=routeInfo.departure[0]
         for i, depart in enumerate(routeInfo.departure):
             #Departure
             calculated_SOC=calculate_SOC(SOC_previous,last_min_power,last_max_power,last_voltage,last_date_time,routeInfo.departure[i],last_Qn)
             if calculated_SOC < 30:
                 print("Error: SOC is less than 30%")
-                issue.append("Error: SOC is less than 30%"+" at "+routeInfo.departure[i].strftime("%H:%M:%S"))      
+                issue.append("Error: SOC is less than 30%"+" at "+routeInfo.departure[i].strftime("%H:%M:%S"))
             elif calculated_SOC > 100:
                 calculated_SOC = 100
             data.append(calculated_SOC)
@@ -175,14 +187,14 @@ def getOutputData(request):
             SOC_previous=calculated_SOC
             if routeInfo.propulsionMethod == 'hybrid electric':
                 if routeInfo.dockedChargingMethod == 'grid power':
-                    last_min_power=routeInfo.minStayPow[i]
-                    last_max_power=routeInfo.maxStayPow[i]
+                    last_min_power= routeInfo.minStayPow[i]
+                    last_max_power= routeInfo.maxStayPow[i]
                 else:
-                    last_min_power=routeInfo.minStayPow[i]-routeInfo.thresholdPower
-                    last_max_power=routeInfo.maxStayPow[i]-routeInfo.thresholdPower
+                    last_min_power=-1 * (routeInfo.minStayPow[i]-routeInfo.thresholdPower)
+                    last_max_power=-1 * (routeInfo.maxStayPow[i]-routeInfo.thresholdPower)
             else:
-                last_min_power=routeInfo.minStayPow[i]
-                last_max_power=routeInfo.maxStayPow[i]
+                last_min_power= routeInfo.minStayPow[i]
+                last_max_power= routeInfo.maxStayPow[i]
             last_date_time=routeInfo.stay[i]
 
         print('data', data)
