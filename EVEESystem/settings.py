@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'crispy_forms',    
     'RouteTracker',
     'bootstrap4',
+    'fontawesome-free',
 ]
 SITE_ID = 1
 CRISPY_TEMPLATE_PACK = "bootstrap4"
@@ -109,15 +110,15 @@ DATABASES = {
 
         'ENGINE': 'django.db.backends.postgresql',
 
-        'NAME': 'postgres',
+        'NAME': os.getenv('DBNAME'),
 
-        'USER': 'postgres',
+        'USER': os.getenv('DBUSER'),
 
-        'PASSWORD': 'admin',
+        'PASSWORD': os.getenv('DBPASS'),
 
-        'HOST': 'localhost',
+        'HOST': os.getenv('DBHOST'),
 
-        'PORT': '5432',
+        'PORT': os.getenv('DBPORT'),
 
     }
 }
